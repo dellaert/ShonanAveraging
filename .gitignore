@@ -1,0 +1,9 @@
+_site
+.sass-cache
+.jekyll-metadata
+assets/bundle.js
+node_modules
+
+.jekyll-cache
+yarn-error.log
+2fd6363a7c128285cf7b827232a339a77d80ecbd/
