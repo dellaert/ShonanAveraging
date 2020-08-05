@@ -1,12 +1,12 @@
 {
-  "name": "ShonanAveraging",
+  "name": "shonan_averaging",
   "version": "1.0.0",
   "description": "Integrate React Plotly into jekyll site",
   "main": "webpack.config.js",
   "scripts": {
     "flow": "flow",
     "start": "jekyll serve",
-    "build": "webpack -p"
+    "build": "webpack"
   },
   "repository": {
     "type": "git",

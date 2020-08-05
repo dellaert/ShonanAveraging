@@ -33,13 +33,7 @@ permalink: /
 
 ## Small World Datasets
 
-| <img src="assets/frank16/(n=20, k=4, p=0.0, s=2)/sankey0.png"  style="width:250px;"/> |<img src="assets/frank16/(n=20, k=4, p=0.0, s=5)/sankey0.png"  style="width:250px;"/> |<img src="assets/frank16/(n=20, k=4, p=0.0, s=10)/sankey0.png"  style="width:250px;"/> |<img src="assets/frank16/(n=20, k=4, p=0.0, s=25)/sankey0.png"  style="width:250px;"/> |<img src="assets/frank16/(n=20, k=4, p=0.0, s=50)/sankey0.png"  style="width:250px;"/> |
-
-| <img src="assets/frank16/(n=20, k=4, p=0.2, s=2)/sankey0.png"  style="width:250px;"/> |<img src="assets/frank16/(n=20, k=4, p=0.2, s=5)/sankey0.png"  style="width:250px;"/> |<img src="assets/frank16/(n=20, k=4, p=0.2, s=10)/sankey0.png"  style="width:250px;"/> |<img src="assets/frank16/(n=20, k=4, p=0.2, s=25)/sankey0.png"  style="width:250px;"/> |<img src="assets/frank16/(n=20, k=4, p=0.2, s=50)/sankey0.png"  style="width:250px;"/> |
-
-| <img src="assets/frank16/(n=20, k=4, p=0.5, s=2)/sankey0.png"  style="width:250px;"/> |<img src="assets/frank16/(n=20, k=4, p=0.5, s=5)/sankey0.png"  style="width:250px;"/> |<img src="assets/frank16/(n=20, k=4, p=0.5, s=10)/sankey0.png"  style="width:250px;"/> |<img src="assets/frank16/(n=20, k=4, p=0.5, s=25)/sankey0.png"  style="width:250px;"/> |<img src="assets/frank16/(n=20, k=4, p=0.5, s=50)/sankey0.png"  style="width:250px;"/> |
-
-| <img src="assets/frank16/(n=20, k=4, p=1.0, s=2)/sankey0.png"  style="width:250px;"/> |<img src="assets/frank16/(n=20, k=4, p=1.0, s=5)/sankey0.png"  style="width:250px;"/> |<img src="assets/frank16/(n=20, k=4, p=1.0, s=10)/sankey0.png"  style="width:250px;"/> |<img src="assets/frank16/(n=20, k=4, p=1.0, s=25)/sankey0.png"  style="width:250px;"/> |<img src="assets/frank16/(n=20, k=4, p=1.0, s=50)/sankey0.png"  style="width:250px;"/> |
+<div id="matrix"></div>
 
 ## Results
 Pivot table with results:
