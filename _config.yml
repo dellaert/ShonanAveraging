@@ -4,11 +4,11 @@
 # 'jekyll serve'. If you change this file, please restart the server process.
 
 # Site settings
-title: Github Pages + Plotly
+title: Shonan Averaging
 email: dellaert@gmail.com
 description: > # this means to ignore newlines until "baseurl:"
-  This template shows how to combine Github Pages + Plotly.
-url: "https://dellaert.github.io/gh-pages-plotly" # the base hostname & protocol for your site
+  This template shows how to combine Shonan Averaging.
+url: "https://dellaert.github.io/ShonanAveraging" # the base hostname & protocol for your site
 twitter_username: fdellaert
 github_username:  dellaert
 

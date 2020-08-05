@@ -1,5 +1,5 @@
 {
-  "name": "gh-pages-plotly",
+  "name": "ShonanAveraging",
   "version": "1.0.0",
   "description": "Integrate React Plotly into jekyll site",
   "main": "webpack.config.js",
@@ -10,7 +10,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/dellaert/gh-pages-plotly.git"
+    "url": "git+https://github.com/dellaert/ShonanAveraging.git"
   },
   "keywords": [
     "jekyll",
@@ -20,9 +20,9 @@
   "author": "Frank Dellaert",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/dellaert/gh-pages-plotly/issues"
+    "url": "https://github.com/dellaert/ShonanAveraging/issues"
   },
-  "homepage": "https://github.com/dellaert/gh-pages-plotly#readme",
+  "homepage": "https://github.com/dellaert/ShonanAveraging#readme",
   "devDependencies": {
     "@babel/cli": "^7.10.5",
     "@babel/core": "^7.11.0",
