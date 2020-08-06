@@ -8,3 +8,4 @@ node_modules
 yarn-error.log
 2fd6363a7c128285cf7b827232a339a77d80ecbd/
 **/.DS_Store
+*.DS_Store
