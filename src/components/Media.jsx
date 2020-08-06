@@ -16,19 +16,19 @@ function Media(props: Props) {
             <div className="col-9 text-center">
                 <Nav variant="pills" justify>
                     <Nav.Item key="paper">
-                        <a href="{props.paper}">
+                        <a href={props.paper}>
                             <img src="assets/images/paper.jpg" height="120px" /><br />
                             <h4><strong>Paper</strong></h4>
                         </a>
                     </Nav.Item>
                     <Nav.Item key="video">
-                        <a href="{props.video}">
+                        <a href={props.video}>
                             <img src="assets/images/youtube_icon_dark.png" height="120px" /><br />
                             <h4><strong>Technical Video</strong></h4>
                         </a>
                     </Nav.Item>
                     <Nav.Item key="repo">
-                        <a href="{props.repo}">
+                        <a href={props.repo}>
                             <img src="assets/images/github_pad.png" height="120px" /><br />
                             <h4><strong>Code</strong></h4>
                         </a>
