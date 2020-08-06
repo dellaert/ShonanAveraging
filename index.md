@@ -27,7 +27,7 @@ Shonan Rotation Averaging is a fast, simple, and elegant rotation averaging algo
 
 <div id="priors"></div>
 
-<!-- #### Results
+#### Results
 Pivot table with results:
 
-<div id="pivot"></div> -->
+<div id="pivot"></div>
