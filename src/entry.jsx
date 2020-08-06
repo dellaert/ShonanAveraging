@@ -11,11 +11,11 @@ ReactDOM.render(<PaperHeader
     title="Shonan Rotation Averaging"
     subtitle="Global Optimality by Surfing SO(p)^n"
     venue="ECCV 2020 (Spotlight)"
-    authors={[{ name: "Frank Dellaert", affiliation: 0, link: "https://dellaert.github.io/" },
-    { name: "David M. Rosen", affiliation: 1, link: "https://marinerobotics.mit.edu/people/david-rosen" },
-    { name: "Jing Wu", affiliation: 0 },
-    { name: "Robert Mahony", affiliation: 2 },
-    { name: "Luca Carlone", affiliation: 1, link: "https://lucacarlone.mit.edu/" },
+    authors={[{ name: "Frank Dellaert", affiliation: 1, link: "https://dellaert.github.io/" },
+    { name: "David M. Rosen", affiliation: 2, link: "https://marinerobotics.mit.edu/people/david-rosen" },
+    { name: "Jing Wu", affiliation: 1 },
+    { name: "Robert Mahony", affiliation: 3 },
+    { name: "Luca Carlone", affiliation: 2, link: "https://lucacarlone.mit.edu/" },
     ]}
     affiliations={["Georgia Institute of Technology", "Massachusetts Inst. of Technology", "Australian National University"]}
 />,

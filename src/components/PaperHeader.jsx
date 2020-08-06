@@ -7,6 +7,7 @@ import React from 'react';
 import Image from 'react-bootstrap/Image';
 import Nav from 'react-bootstrap/Nav';
 
+// Not affiliation is base 1
 type AuthorRecord = { name: string; affiliation: number; link?: string };
 
 type Props = {
@@ -19,8 +20,8 @@ function Author(props: AuthorRecord) {
     const { name, affiliation, link } = props;
     return (<li className="list-inline-item" key={name}>
         {link
-            ? (<a href={link}>{name}<sup>{affiliation + 1}</sup></a>)
-            : (<span>{name}<sup>{affiliation + 1}</sup></span>)
+            ? (<a href={link}>{name}<sup>{affiliation}</sup></a>)
+            : (<span>{name}<sup>{affiliation}</sup></span>)
         }
     </li>);
 }
@@ -47,8 +48,8 @@ function PaperHeader(props: Props) {
             <div className="row">
                 <div className="col text-center">
                     <ul className="list-inline">
-                        {props.affiliations.map((affiliation,index) =>
-                            <li className="list-inline-item" key={index}><sup>{index+1}</sup>{affiliation}</li>
+                        {props.affiliations.map((name, index) =>
+                            <li className="list-inline-item" key={index}><sup>{index + 1}</sup>{name}</li>
                         )}
                     </ul>
                 </div>
