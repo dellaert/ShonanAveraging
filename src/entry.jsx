@@ -33,4 +33,4 @@ ReactDOM.render(<PriorsGrid gamma_values={[0, 1, 100, 10000]} />, document.getEl
 
 ReactDOM.render(<ImageGrid n_values={[20, 40]} k_values={[4, 8, 16]} />, document.getElementById('matrix'));
 
-    // ReactDOM.render(<PivotTable />, document.getElementById('pivot'));
+ReactDOM.render(<PivotTable />, document.getElementById('pivot'));
