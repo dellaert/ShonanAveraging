@@ -1,11 +1,10 @@
 // @flow
 import React, { useState } from 'react';
-import Button from 'react-bootstrap/Button';
-import ButtonGroup from 'react-bootstrap/ButtonGroup';
 import ButtonToolbar from 'react-bootstrap/ButtonToolbar';
 import Table from 'react-bootstrap/Table';
 import ImageRow from './ImageRow';
 import SmallWorld from './SmallWorld';
+import ParameterGroup from './ParameterGroup';
 
 type Props = { n_values: Array<number>; k_values: Array<number>; };
 
@@ -19,22 +18,8 @@ function ImageGrid(props: Props) {
     return (
         <div>
             <ButtonToolbar className="mb-2">
-                <ButtonGroup className="mr-2" aria-label="n_values button group">
-                    {n_values.map(n =>
-                        <Button onClick={() => setN(n)}
-                            key={n} active={n === current_n}
-                            variant="outline-primary">{n}
-                        </Button>
-                    )}
-                </ButtonGroup>
-                <ButtonGroup aria-label="k_values button group">
-                    {k_values.map(k =>
-                        <Button onClick={() => setK(k)}
-                            key={k} active={k === current_k}
-                            variant="outline-primary">{k}
-                        </Button>
-                    )}
-                </ButtonGroup>
+                <ParameterGroup values={n_values} setValue={setN} current={current_n} />
+                <ParameterGroup values={k_values} setValue={setK} current={current_k} />
             </ButtonToolbar>
             <Table size="sm">
                 <thead>
@@ -51,7 +36,7 @@ function ImageGrid(props: Props) {
             </Table>
             <SmallWorld n={current_n} k={current_k} p={0.0} s={50} />
             />
-        </div>
+        </div >
     );
 }
 export default ImageGrid;
