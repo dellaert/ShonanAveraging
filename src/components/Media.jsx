@@ -5,34 +5,37 @@
 // In turn adapted from http://mgharbi.com/
 import React from 'react';
 import Image from 'react-bootstrap/Image';
+import Nav from 'react-bootstrap/Nav';
 
-type Props = { paper: string; video:string; repo:string};
+type Props = { paper: string; video: string; repo: string };
 
 function Media(props: Props) {
     return (
-        <div class="row">
-            <div class="col-md-8 col-md-offset-2 text-center">
-                <ul class="nav nav-pills nav-justified">
-                    <li>
+        <div className="row">
+            <div className="col" />
+            <div className="col-9 text-center">
+                <Nav variant="pills" justify>
+                    <Nav.Item key="paper">
                         <a href="{props.paper}">
-                            <image src="assets/images/paper.jpg" height="120px" /><br />
+                            <img src="assets/images/paper.jpg" height="120px" /><br />
                             <h4><strong>Paper</strong></h4>
                         </a>
-                    </li>
-                    <li>
+                    </Nav.Item>
+                    <Nav.Item key="video">
                         <a href="{props.video}">
-                            <image src="assets/images/youtube_icon_dark.png" height="120px" /><br />
+                            <img src="assets/images/youtube_icon_dark.png" height="120px" /><br />
                             <h4><strong>Technical Video</strong></h4>
                         </a>
-                    </li>
-                    <li>
+                    </Nav.Item>
+                    <Nav.Item key="repo">
                         <a href="{props.repo}">
-                            <image src="assets/images/github_pad.png" height="120px" /><br />
+                            <img src="assets/images/github_pad.png" height="120px" /><br />
                             <h4><strong>Code</strong></h4>
                         </a>
-                    </li>
-                </ul>
+                    </Nav.Item>
+                </Nav>
             </div>
+            <div className="col" />
         </div>
     );
 }

@@ -35,7 +35,6 @@ function ImageGrid(props: Props) {
                 </tbody>
             </Table>
             <SmallWorld n={current_n} k={current_k} p={0.0} s={50} />
-            />
         </div >
     );
 }
