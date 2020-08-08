@@ -1,0 +1,6 @@
+add_executable(shonan_ceres_test shonan_ceres_test.cpp)
+target_link_libraries(shonan_ceres_test gtest_main)
+target_link_libraries(shonan_ceres_test Eigen3::Eigen)
+target_include_directories(shonan_ceres_test PRIVATE ${CERES_INCLUDE_DIRS})
+target_link_libraries(shonan_ceres_test ${CERES_LIBRARIES})
+add_test(NAME shonan_ceres COMMAND shonan_ceres_test)
