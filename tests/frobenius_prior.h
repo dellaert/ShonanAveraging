@@ -38,9 +38,7 @@ public:
 
     // Compute the Jacobian if asked for.
     if (jacobians != nullptr && jacobians[0] != nullptr) {
-      using Jacobian = Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic,
-                                     Eigen::RowMajor>;
-      Eigen::Map<Jacobian> H(jacobians[0], n_, n_);
+      Eigen::Map<RowMajorMatrix> H(jacobians[0], n_, n_);
       H = SOn::RetractJacobian<Eigen::RowMajor>(3);
     }
     return true;

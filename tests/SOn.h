@@ -12,6 +12,8 @@
 namespace shonan {
 using Vector = Eigen::VectorXd;
 using Matrix = Eigen::MatrixXd; // column major
+using RowMajorMatrix =
+    Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic, Eigen::RowMajor>;
 
 class SOn {
 public:
@@ -32,6 +34,9 @@ public:
 
   /// Return matrix
   const Matrix &matrix() const { return matrix_; }
+
+  /// Multiplication
+  SOn operator*(const SOn &g) const { return SOn(matrix() * g.matrix()); }
 
   /// Return vectorized rotation matrix in column order.
   Vector vec(double **H = nullptr) const {

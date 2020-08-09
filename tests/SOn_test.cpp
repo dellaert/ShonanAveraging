@@ -44,7 +44,6 @@ TEST(SOn, Hat) {
 }
 
 TEST(SOn, RetractJacobian) {
-  using RowMajorMatrix = Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic, Eigen::RowMajor>;
   RowMajorMatrix expected(9, 3);
   expected << 0., 0., 0., //
       0., 0., 1.,         //
