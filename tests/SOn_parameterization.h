@@ -21,8 +21,8 @@ public:
   int LocalSize() const override { return dim_; }
 
   // x * SOn::Retract(delta)
-  static Matrix Retract(const Matrix &R, const Vector &xi) {
-    return R * SOn::Retract(xi).matrix();
+  static SOn Retract(const SOn &Q, const Vector &xi) {
+    return Q * SOn::Retract(xi);
   }
 
   bool Plus(const double *x, const double *delta,
