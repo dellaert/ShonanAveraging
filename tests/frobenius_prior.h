@@ -1,5 +1,8 @@
 /**
- * Frobenius prior minimizes Frobenius error to a given "prior mean" matrix.
+ * @file frobenius_prior.h
+ * @brief Factor that minimizes Frobenius error to a given "prior mean" matrix
+ * @author Frank Dellaert
+ * @date August 2020
  */
 
 #pragma once

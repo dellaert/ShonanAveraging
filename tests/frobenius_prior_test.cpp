@@ -1,5 +1,8 @@
 /**
- * Test optimizing with Ceres
+ * @file frobenius_prior_test.h
+ * @brief Tests for FrobeniusPrior factor.
+ * @author Frank Dellaert
+ * @date August 2020
  */
 
 #include "SOn_parameterization.h"
@@ -15,17 +18,14 @@
 using namespace std;
 using namespace shonan;
 
-namespace so3 {
-Vector v1 = (Vector(3) << 1, 2, 3).finished();
-SOn R1 = SOn::Retract(v1);
-Vector v2 = (Vector(3) << 0.01, 0.02, 0.03).finished();
-SOn R2 = SOn::Retract(v2);
-// SOn R12 = R1.between(R2);
-} // namespace so3
+TEST(FrobeniusPrior, SO3) {
+  // Some test values
+  Vector v1 = (Vector(3) << 1, 2, 3).finished();
+  SOn R1 = SOn::Retract(v1);
+  Vector v2 = (Vector(3) << 0.01, 0.02, 0.03).finished();
+  SOn R2 = SOn::Retract(v2);
 
-TEST(ShonanCeresTest, FrobeniusPriorSO3) {
   // Create factor aka "cost function"
-  using namespace ::so3;
   auto factor = new FrobeniusPrior(R2.matrix());
 
   // Initialize parameters
