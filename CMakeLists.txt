@@ -32,6 +32,6 @@ if (POLICY CMP0079)
 endif (POLICY CMP0079)
 
 add_subdirectory( googletest )
-add_subdirectory( tests )
+add_subdirectory( ceres )
 add_subdirectory( src )
 
