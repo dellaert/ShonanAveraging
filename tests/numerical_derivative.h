@@ -1,6 +1,6 @@
 #pragma once
 
-#include "vec.h"
+#include "matrix.h"
 
 namespace shonan {
 

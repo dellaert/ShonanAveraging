@@ -7,15 +7,12 @@
 
 #pragma once
 
-#include "vec.h"
+#include "matrix.h"
+#include "traits.h"
 
 #include <Eigen/Dense>
 
 namespace shonan {
-using Vector = Eigen::VectorXd;
-using Matrix = Eigen::MatrixXd; // column major
-using RowMajorMatrix =
-    Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic, Eigen::RowMajor>;
 
 class SOn {
 public:

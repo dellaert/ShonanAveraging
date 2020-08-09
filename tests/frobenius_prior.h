@@ -6,7 +6,6 @@
 
 #include "SOn.h"
 #include "ceres/ceres.h"
-#include "vec.h"
 
 namespace shonan {
 
