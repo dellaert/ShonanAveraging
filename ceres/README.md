@@ -1,0 +1,1 @@
+pose_graph_2d --input data/pose2example.g2o
