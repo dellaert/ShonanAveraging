@@ -36,12 +36,12 @@ public:
 
   bool ComputeJacobian(const double *x, double *jacobian) const override {
     if (jacobian) {
-      // Jacobian of multiplication is - kronecker_product(I, R)
+      // Jacobian of multiplication is kronecker_product(I, R)
       Matrix Dmul(nn_, nn_);
       Dmul.setZero();
       Eigen::Map<const Matrix> R(x, n_, n_);
       for (size_t i = 0; i < n_; i++) {
-        Dmul.block(n_ * i, n_ * i, n_, n_) = -R;
+        Dmul.block(n_ * i, n_ * i, n_, n_) = R;
       }
       // Apply chain rule
       Eigen::Map<RowMajorMatrix> H(jacobian, nn_, dim_);

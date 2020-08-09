@@ -22,9 +22,9 @@ Matrix numericalDerivative(std::function<Matrix(const Vector &)> h,
   const double factor = 1.0 / (2.0 * delta);
   for (size_t j = 0; j < n; j++) {
     dx(j) = delta;
-    const auto dy1 = vec(hx - h(x + dx));
+    const auto dy1 = vec(h(x + dx) - hx);
     dx(j) = -delta;
-    const auto dy2 = vec(hx - h(x + dx));
+    const auto dy2 = vec(h(x + dx) - hx);
     dx(j) = 0;
     H.col(j) = (dy1 - dy2) * factor;
   }

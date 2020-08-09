@@ -6,6 +6,7 @@
 
 #include "SOn.h"
 #include "ceres/ceres.h"
+#include "vec.h"
 
 namespace shonan {
 
@@ -29,17 +30,14 @@ public:
   bool Evaluate(double const *const *values, double *error,
                 double **jacobians) const override {
     Eigen::Map<const Matrix> R(values[0], n_, n_);
-    // TODO(frank): use vec
-    for (size_t j = 0, r = 0; j < n_; j++) {
-      for (size_t i = 0; i < n_; i++) {
-        error[r++] = R(i, j) - mean_(i, j);
-      }
-    }
+    Eigen::Map<Vector> e(error, nn_, 1);
+    e = vec(R - mean_);
 
     // Compute the Jacobian if asked for.
     if (jacobians != nullptr && jacobians[0] != nullptr) {
-      Eigen::Map<RowMajorMatrix> H(jacobians[0], n_, n_);
-      H = SOn::RetractJacobian<Eigen::RowMajor>(3);
+      Eigen::Map<RowMajorMatrix> H(jacobians[0], nn_, nn_);
+      H.setIdentity();
+      // H = SOn::RetractJacobian<Eigen::RowMajor>(n_);
     }
     return true;
   }
