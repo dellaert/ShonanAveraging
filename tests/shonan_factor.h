@@ -24,15 +24,34 @@ public:
 private:
   Matrix M_;            ///< measured rotation between R1 and R2
   size_t p_, pp_, dim_; ///< dimensionality constants
+  Matrix H1_, H2_;      ///< constant Jacobians
 
 public:
   /// Construct from rotation variable index and prior mean, as an nxn matrix.
   explicit ShonanFactor(const SOn &R12, size_t p)
-      : M_(R12.matrix()), p_(p), pp_(p * p), dim_(p_ * d) {
+      : M_(R12.matrix()),                //
+        p_(p), pp_(p * p), dim_(p_ * d), //
+        H1_(dim_, pp_), H2_(dim_, pp_) {
     assert(R12.matrix().rows() == d);
     mutable_parameter_block_sizes()->push_back(pp_); // elements in SO(p) matrix
     mutable_parameter_block_sizes()->push_back(pp_); // same for second block
     set_num_residuals(d); // elements in Stiefel Frobenius norm
+
+    // Pre-calculate Jacobians
+    // TODO(frank): they are constant (and sparse!), how to handle in ceres?
+
+    // There are p_ 3*3 blocks, one corresponding to each 1*3 row
+    H1_.setZero();
+    const Matrix minMt = -M_.transpose();
+    for (size_t k = 0; k < p_; k++) {
+      H1_.block<3, 3>(k * 3, k * p_) = minMt;
+    }
+
+    // There are p_ 3*3 identity matrices, one corresponding to each 1*3 row
+    H2_.setZero();
+    for (size_t k = 0; k < p_; k++) {
+      H2_.block<3, 3>(k * 3, k * p_).setIdentity();
+    }
   }
 
   virtual ~ShonanFactor() {}
@@ -65,24 +84,10 @@ public:
     // Compute the Jacobian if asked for.
     if (jacobians != nullptr) {
       if (jacobians[0] != nullptr) {
-        Eigen::Map<Matrix> H(jacobians[0], dim_, pp_);
-        H.setZero();
-        // There are p_ 3*3 blocks, one corresponding to each 1*3 row
-        // TODO(frank): this matrix is constant (and sparse!), how to do in ceres?
-        size_t j = 0;
-        for (size_t k = 0; k < p_; k++) {
-          H.block<3, 3>(k * 3, k * p_) = - M_.transpose();
-        }
+        Eigen::Map<Matrix>(jacobians[0], dim_, pp_) = H1_;
       }
       if (jacobians[1] != nullptr) {
-        Eigen::Map<Matrix> H(jacobians[1], dim_, pp_);
-        H.setZero();
-        // There are p_ 3*3 identity matrices, one corresponding to each 1*3 row
-        // TODO(frank): this matrix is constant (and sparse!), how to do in ceres?
-        size_t j = 0;
-        for (size_t k = 0; k < p_; k++) {
-          H.block<3, 3>(k * 3, k * p_).setIdentity();
-        }
+        Eigen::Map<Matrix>(jacobians[1], dim_, pp_) = H2_;
       }
     }
     return true;
