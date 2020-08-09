@@ -5,9 +5,13 @@
 #include "SOn.h"
 #include "gtest/gtest.h"
 
+#include <iostream>
+
+using namespace std;
 using namespace shonan;
 
-namespace {
+using Matrix = ceres::Matrix;
+using Vector = ceres::Vector;
 
 TEST(SOn, Hat) {
   Vector v(10);
@@ -44,18 +48,16 @@ TEST(SOn, Hat) {
 }
 
 TEST(SOn, RetractJacobian) {
-  RowMajorMatrix expected(9, 3);
+  Matrix expected(9, 3);
   expected << 0., 0., 0., //
-      0., 0., 1.,         //
-      0., -1, 0.,         //
       0., 0., -1,         //
-      0., 0., 0.,         //
-      1., 0., 0.,         //
       0., 1., 0.,         //
+      0., 0., 1.,         //
+      0., 0., 0.,         //
       -1, 0., 0.,         //
+      0., -1, 0.,         //
+      1., 0., 0.,         //
       0., 0., 0.;
-  RowMajorMatrix actual = SOn::RetractJacobian<Eigen::RowMajor>(3);
+  Matrix actual = SOn::RetractJacobian<Eigen::RowMajor>(3);
   ASSERT_TRUE(expected.isApprox(actual));
 }
-
-} // namespace

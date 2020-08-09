@@ -19,6 +19,9 @@
 using namespace std;
 using namespace shonan;
 
+using Matrix = ceres::Matrix;
+using Vector = ceres::Vector;
+
 TEST(FrobeniusPrior, SO3) {
   // Some test values
   Vector v1 = (Vector(3) << 1, 2, 3).finished();
@@ -34,7 +37,7 @@ TEST(FrobeniusPrior, SO3) {
   parameters.Insert(1, R1);
   std::cout << "initial:\n" << parameters.At<SOn>(1) << endl;
 
-  // Call Evaluate
+  // Call unsafe Evaluate
   std::vector<size_t> keys{1};
   std::vector<double *> unsafe = parameters.Unsafe(keys);
   double error[9];
@@ -45,18 +48,15 @@ TEST(FrobeniusPrior, SO3) {
   Eigen::Map<Vector> actual(error, 9, 1);
   ASSERT_TRUE(expected.isApprox(actual));
 
+  // Check result of safe Evaluate
+  ASSERT_TRUE(expected.isApprox(factor->Evaluate(R1)));
+
   // Check Jacobian against numerical derivative for SO(3)
-  auto h = [factor, keys](const Vector &Rvec) -> Matrix {
-    ceres::Parameters<> parameters;
-    parameters.Insert(1, ceres::traits<SOn>::Unvec(9, Rvec.data()));
-    std::vector<double *> unsafe = parameters.Unsafe(keys);
-    double e[9];
-    factor->Evaluate(unsafe.data(), e, nullptr);
-    auto E = Eigen::Map<Matrix>(e, 3, 3);
-    return E;
+  auto h = [factor](const SOn &R) -> Vector {
+    return factor->Evaluate(R);
   };
-  Matrix expectedH = numericalDerivative(h, R1.vec());
-  RowMajorMatrix actualH(9, 9);
+  Matrix expectedH = ceres::numericalDerivative<Matrix, SOn>(h, R1);
+  Matrix actualH(9, 9);
   double *jacobians[1]{actualH.data()};
   factor->Evaluate(unsafe.data(), error, jacobians);
   ASSERT_TRUE(expectedH.isApprox(actualH, 1e-9));

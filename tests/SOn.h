@@ -16,6 +16,9 @@ namespace shonan {
 
 class SOn {
 public:
+  using Matrix = ceres::Matrix;
+  using Vector = ceres::Vector;
+
 protected:
   Matrix matrix_; ///< Rotation matrix
 
@@ -62,7 +65,7 @@ public:
     if (H) {
       throw std::runtime_error("SOn::vec jacobian not implemented.");
     }
-    return shonan::vec(matrix());
+    return ceres::vec(matrix());
   }
 
   friend std::ostream &operator<<(std::ostream &os, const SOn &Q) {
@@ -160,15 +163,12 @@ namespace ceres {
 // define ceres traits for SOn
 template <> struct traits<shonan::SOn> {
   /// Ambient dimensions = n^2
-  static size_t AmbientDim(const shonan::SOn &t) {
-    size_t n = t.matrix().rows();
-    return n * n;
-  }
+  static size_t AmbientDim(const shonan::SOn &t) { return t.matrix().size(); }
 
   /// Vectorize to doubles in pre-allocated block
   static void Vec(const shonan::SOn &t, double *const block) {
     size_t n = t.matrix().rows();
-    Eigen::Map<shonan::Matrix>(block, n, n) = t.matrix();
+    Eigen::Map<Matrix>(block, n, n) = t.matrix();
   }
 
   /// initialize from vectorized storage
@@ -177,7 +177,7 @@ template <> struct traits<shonan::SOn> {
     using std::sqrt;
     size_t n = static_cast<size_t>(floor(sqrt(static_cast<float>(nn))));
     assert(n * n == nn);
-    return shonan::SOn(Eigen::Map<const shonan::Matrix>(block, n, n));
+    return shonan::SOn(Eigen::Map<const Matrix>(block, n, n));
   }
 };
 

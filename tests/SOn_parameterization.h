@@ -11,6 +11,11 @@ namespace shonan {
 // Plus(x, delta) = x * SOn::Retract(delta)
 // with * being the SOn multiplication operator.
 class CERES_EXPORT SOnParameterization : public ceres::LocalParameterization {
+public:
+  using Matrix = ceres::Matrix;
+  using Vector = ceres::Vector;
+
+private:
   size_t n_, nn_, dim_;          ///< relevant dimensions
   mutable Matrix Rplus_H_Delta_; ///< Jacobian storage
   Matrix Delta_H_xi_;            ///< const intermediate Jacobian
@@ -18,9 +23,7 @@ class CERES_EXPORT SOnParameterization : public ceres::LocalParameterization {
 public:
   explicit SOnParameterization(size_t n)
       : n_(n), nn_(n * n), dim_(SOn::Dimension(n)), Rplus_H_Delta_(nn_, nn_),
-        Delta_H_xi_(SOn::RetractJacobian<Eigen::RowMajor>(n_)) {
-    Rplus_H_Delta_.setZero();
-  }
+        Delta_H_xi_(SOn::RetractJacobian<Eigen::RowMajor>(n_)) {}
   virtual ~SOnParameterization() {}
   int GlobalSize() const override { return nn_; }
   int LocalSize() const override { return dim_; }
@@ -40,15 +43,22 @@ public:
     return true;
   }
 
+  // Jacobian of A*B in B is Kronecker product $A \otimes I$
+  void DMul(const Matrix &A, Matrix *H) const {
+    const Matrix I_nxn = Matrix::Identity(n_, n_);
+    for (size_t i = 0; i < n_; i++) {
+      for (size_t j = 0; j < n_; j++) {
+        H->block(n_ * i, n_ * j, n_, n_) = A(i, j) * I_nxn;
+      }
+    }
+  }
+
   bool ComputeJacobian(const double *x, double *jacobian) const override {
     if (jacobian) {
-      // Jacobian of $R * Delta$ is Kronecker product $I \otimes R$
       Eigen::Map<const Matrix> R(x, n_, n_);
-      for (size_t i = 0; i < n_; i++) {
-        Rplus_H_Delta_.block(n_ * i, n_ * i, n_, n_) = R;
-      }
+      DMul(R, &Rplus_H_Delta_);
       // Apply chain rule
-      Eigen::Map<RowMajorMatrix> H(jacobian, nn_, dim_);
+      Eigen::Map<Matrix> H(jacobian, nn_, dim_);
       H = Rplus_H_Delta_ * Delta_H_xi_;
     }
     return true;
