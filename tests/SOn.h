@@ -7,6 +7,8 @@
 
 #pragma once
 
+#include "vec.h"
+
 #include <Eigen/Dense>
 
 namespace shonan {
@@ -40,19 +42,12 @@ public:
 
   /// Return vectorized rotation matrix in column order.
   Vector vec(double **H = nullptr) const {
-    const size_t n = matrix_.rows();
-    const size_t n2 = n * n;
-
-    // Vectorize
-    Vector X(n2);
-    X << Eigen::Map<const Matrix>(matrix_.data(), n2, 1);
-
     // If requested, calculate H as (I \oplus Q) * P,
     // where Q is the N*N rotation matrix, and P is calculated below.
     if (H) {
       throw std::runtime_error("SOn::vec jacobian not implemented.");
     }
-    return X;
+    return shonan::vec(matrix());
   }
 
   /// @}

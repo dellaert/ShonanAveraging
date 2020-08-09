@@ -1,14 +1,8 @@
 #pragma once
-#include <Eigen/Dense>
+
+#include "vec.h"
 
 namespace shonan {
-
-using Vector = Eigen::VectorXd;
-using Matrix = Eigen::MatrixXd; // column major
-
-Vector vec(const Matrix &Q) {
-  return Eigen::Map<const Vector>(Q.data(), Q.rows() * Q.cols(), 1);
-}
 
 /// Numerical derivate of Matrix-valued function h at Vector-valued x
 Matrix numericalDerivative(std::function<Matrix(const Vector &)> h,
