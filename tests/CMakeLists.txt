@@ -19,6 +19,13 @@ target_include_directories(frobenius_prior_test PRIVATE ${CERES_INCLUDE_DIRS})
 target_link_libraries(frobenius_prior_test ${CERES_LIBRARIES})
 add_test(NAME frobenius_prior COMMAND frobenius_prior_test)
 
+add_executable(shonan_factor_test shonan_factor_test.cpp)
+target_link_libraries(shonan_factor_test gtest_main)
+target_link_libraries(shonan_factor_test Eigen3::Eigen)
+target_include_directories(shonan_factor_test PRIVATE ${CERES_INCLUDE_DIRS})
+target_link_libraries(shonan_factor_test ${CERES_LIBRARIES})
+add_test(NAME shonan_factor COMMAND shonan_factor_test)
+
 add_executable(shonan_ceres_test shonan_ceres_test.cpp)
 target_link_libraries(shonan_ceres_test gtest_main)
 target_link_libraries(shonan_ceres_test Eigen3::Eigen)
