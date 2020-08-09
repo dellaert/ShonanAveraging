@@ -8,6 +8,7 @@
 #include "SOn_parameterization.h"
 #include "frobenius_prior.h"
 #include "numerical_derivative.h"
+#include "parameters.h"
 
 #include "ceres/ceres.h"
 
@@ -29,15 +30,15 @@ TEST(FrobeniusPrior, SO3) {
   auto factor = new FrobeniusPrior(R2.matrix());
 
   // Initialize parameters
-  double block0[9];
-  double *parameters[1]{block0};
-  Eigen::Map<Matrix> R(block0, 3, 3);
-  R = R1.matrix();
-  std::cout << "initial R:\n" << R << endl;
+  ceres::Parameters<> parameters;
+  parameters.Insert(1, R1);
+  std::cout << "initial:\n" << parameters.At<SOn>(1) << endl;
 
   // Call Evaluate
+  std::vector<size_t> keys{1};
+  std::vector<double *> unsafe = parameters.Unsafe(keys);
   double error[9];
-  ASSERT_TRUE(factor->Evaluate(parameters, error, nullptr));
+  ASSERT_TRUE(factor->Evaluate(unsafe.data(), error, nullptr));
 
   // Check result
   Vector expected = R1.vec() - R2.vec();
@@ -45,26 +46,26 @@ TEST(FrobeniusPrior, SO3) {
   ASSERT_TRUE(expected.isApprox(actual));
 
   // Check Jacobian against numerical derivative for SO(3)
-  auto h = [factor](const Vector &Rvec) -> Matrix {
-    double block0[9];
-    double *parameters[1]{block0};
-    Eigen::Map<Vector>(block0, 9, 1) = Rvec;
+  auto h = [factor, keys](const Vector &Rvec) -> Matrix {
+    ceres::Parameters<> parameters;
+    parameters.Insert(1, ceres::traits<SOn>::Unvec(9, Rvec.data()));
+    std::vector<double *> unsafe = parameters.Unsafe(keys);
     double e[9];
-    factor->Evaluate(parameters, e, nullptr);
+    factor->Evaluate(unsafe.data(), e, nullptr);
     auto E = Eigen::Map<Matrix>(e, 3, 3);
     return E;
   };
   Matrix expectedH = numericalDerivative(h, R1.vec());
   RowMajorMatrix actualH(9, 9);
   double *jacobians[1]{actualH.data()};
-  factor->Evaluate(parameters, error, jacobians);
+  factor->Evaluate(unsafe.data(), error, jacobians);
   ASSERT_TRUE(expectedH.isApprox(actualH, 1e-9));
 
   // Build a problem.
   ceres::Problem problem;
-  problem.AddResidualBlock(factor, nullptr, block0);
+  problem.AddResidualBlock(factor, nullptr, parameters.Unsafe(1));
   auto *SOn_local_parameterization = new SOnParameterization(3);
-  problem.SetParameterization(block0, SOn_local_parameterization);
+  problem.SetParameterization(parameters.Unsafe(1), SOn_local_parameterization);
 
   // Set solver options
   using ceres::Solver;
@@ -77,6 +78,6 @@ TEST(FrobeniusPrior, SO3) {
   Solve(options, &problem, &summary);
 
   std::cout << summary.BriefReport() << "\n";
-  std::cout << " ->\n" << R << endl;
-  ASSERT_TRUE(R.isApprox(R2.matrix(), 1e-9));
+  std::cout << " ->\n" << parameters.At<SOn>(1) << endl;
+  ASSERT_TRUE(R2.matrix().isApprox(parameters.At<SOn>(1).matrix(), 1e-9));
 }
