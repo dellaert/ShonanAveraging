@@ -27,6 +27,19 @@ public:
   template <typename Derived>
   explicit SOn(const Eigen::MatrixBase<Derived> &R) : matrix_(R.eval()) {}
 
+  /// Named constructor from lower dimensional matrix
+  template <typename Derived>
+  static SOn Lift(size_t n, const Eigen::MatrixBase<Derived> &R) {
+    Matrix Q = Matrix::Identity(n, n);
+    size_t p = R.rows();
+    assert(p <= n && R.cols() == p);
+    Q.topLeftCorner(p, p) = R;
+    return SOn(Q);
+  }
+
+  /// Named constructor from lower dimensional SOn
+  static SOn Lift(size_t n, const SOn &R) { return Lift(n, R.matrix()); }
+
   /// @}
   /// @name Standard methods
   /// @{
@@ -37,6 +50,11 @@ public:
   /// Multiplication
   SOn operator*(const SOn &g) const { return SOn(matrix() * g.matrix()); }
 
+  /// Between
+  SOn between(const SOn &g) const {
+    return SOn(matrix().inverse() * g.matrix());
+  }
+
   /// Return vectorized rotation matrix in column order.
   Vector vec(double **H = nullptr) const {
     // If requested, calculate H as (I \oplus Q) * P,
@@ -45,6 +63,11 @@ public:
       throw std::runtime_error("SOn::vec jacobian not implemented.");
     }
     return shonan::vec(matrix());
+  }
+
+  friend std::ostream &operator<<(std::ostream &os, const SOn &Q) {
+    os << Q.matrix();
+    return os;
   }
 
   /// @}
@@ -132,3 +155,30 @@ public:
 }; // SOn
 
 } // namespace shonan
+
+namespace ceres {
+// define ceres traits for SOn
+template <> struct traits<shonan::SOn> {
+  /// Ambient dimensions = n^2
+  static size_t AmbientDim(const shonan::SOn &t) {
+    size_t n = t.matrix().rows();
+    return n * n;
+  }
+
+  /// Vectorize to doubles in pre-allocated block
+  static void Vec(const shonan::SOn &t, double *const block) {
+    size_t n = t.matrix().rows();
+    Eigen::Map<shonan::Matrix>(block, n, n) = t.matrix();
+  }
+
+  /// initialize from vectorized storage
+  static shonan::SOn Unvec(size_t nn, const double *const block) {
+    using std::floor;
+    using std::sqrt;
+    size_t n = static_cast<size_t>(floor(sqrt(static_cast<float>(nn))));
+    assert(n * n == nn);
+    return shonan::SOn(Eigen::Map<const shonan::Matrix>(block, n, n));
+  }
+};
+
+} // namespace ceres
