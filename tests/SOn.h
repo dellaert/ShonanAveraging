@@ -26,6 +26,9 @@ public:
   /// @name Constructors
   /// @{
 
+  /// Default constructor
+  SOn() {}
+
   /// Constructor from Eigen Matrix, dynamic version
   template <typename Derived>
   explicit SOn(const Eigen::MatrixBase<Derived> &R) : matrix_(R.eval()) {}

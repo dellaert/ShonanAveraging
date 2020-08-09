@@ -22,16 +22,23 @@ using namespace shonan;
 using Matrix = ceres::Matrix;
 using Vector = ceres::Vector;
 
-TEST(ShonanFactor, evaluateError) {
-  // Some test values
-  Vector v1 = (Vector(3) << 0.1, 0, 0).finished();
-  SOn R1 = SOn::Retract(v1);
-  Vector v2 = (Vector(3) << 0.01, 0.02, 0.03).finished();
-  SOn R2 = SOn::Retract(v2);
-  SOn R12 = R1.between(R2);
+class ShonanFactorTest : public ::testing::Test {
+protected:
+  void SetUp() override {
+    Vector v1 = (Vector(3) << 0.1, 0, 0).finished();
+    R1 = SOn::Retract(v1);
+    Vector v2 = (Vector(3) << 0.01, 0.02, 0.03).finished();
+    R2 = SOn::Retract(v2);
+    R12 = R1.between(R2);
+  }
 
+  // void TearDown() override {}
+
+  SOn R1, R2, R12;
+};
+
+TEST_F(ShonanFactorTest, evaluateError) {
   for (const size_t p : {5, 4, 3}) {
-    cout << "p=" << p << endl;
     SOn Q1 = SOn::Lift(p, R1);
     SOn Q2 = SOn::Lift(p, R2);
     auto factor = new ShonanFactor<3>(R12, p);
@@ -40,9 +47,6 @@ TEST(ShonanFactor, evaluateError) {
     ceres::Parameters<> parameters;
     parameters.Insert(1, Q1);
     parameters.Insert(2, Q2);
-    std::cout << "initial:\n"
-              << parameters.At<SOn>(1) << endl << endl
-              << parameters.At<SOn>(2) << endl << endl;
 
     // Call Evaluate
     std::vector<double *> unsafe = parameters.Unsafe({1, 2});
@@ -71,35 +75,52 @@ TEST(ShonanFactor, evaluateError) {
     ASSERT_TRUE(expectedH1.isApprox(actualH1, 1e-9));
 
     // Check Jacobian of second argument
-    {
-      auto h2 = [factor, Q1](const SOn &Q) -> Vector {
-        return factor->Evaluate(Q1, Q);
-      };
-      Matrix expectedH2 = ceres::numericalDerivative<Matrix, SOn>(h2, Q2);
-      ASSERT_TRUE(expectedH2.isApprox(actualH2, 1e-9));
+    auto h2 = [factor, Q1](const SOn &Q) -> Vector {
+      return factor->Evaluate(Q1, Q);
+    };
+    Matrix expectedH2 = ceres::numericalDerivative<Matrix, SOn>(h2, Q2);
+    ASSERT_TRUE(expectedH2.isApprox(actualH2, 1e-9));
+  }
+}
+
+TEST_F(ShonanFactorTest, Optimization) {
+  for (const size_t p : {5, 4, 3}) {
+    cout << "p=" << p << endl;
+    SOn Q1 = SOn::Lift(p, R1);
+    SOn Q2 = SOn::Lift(p, R2);
+    auto factor = new ShonanFactor<3>(R12, p);
+
+    // Initialize parameters
+    ceres::Parameters<> parameters;
+    parameters.Insert(1, Q1);
+    parameters.Insert(2, Q2);
+    std::cout << "initial:\n"
+              << parameters.At<SOn>(1) << endl
+              << parameters.At<SOn>(2) << endl;
+
+    // Build a problem.
+    ceres::Problem problem;
+    std::vector<double *> unsafe = parameters.Unsafe({1, 2});
+    problem.AddResidualBlock(factor, nullptr, unsafe[0], unsafe[1]);
+    auto *SOn_local_parameterization = new SOnParameterization(p);
+    for (auto block : unsafe) {
+      problem.SetParameterization(block, SOn_local_parameterization);
     }
 
-    // // Build a problem.
-    // ceres::Problem problem;
-    // problem.AddResidualBlock(factor, nullptr, parameters.Unsafe(1));
-    // auto *SOn_local_parameterization = new SOnParameterization(3);
-    // problem.SetParameterization(parameters.Unsafe(1),
-    //                             SOn_local_parameterization);
+    // Set solver options
+    using ceres::Solver;
+    Solver::Options options;
+    options.linear_solver_type = ceres::SPARSE_NORMAL_CHOLESKY;
+    options.minimizer_progress_to_stdout = true;
 
-    // // Set solver options
-    // using ceres::Solver;
-    // Solver::Options options;
-    // options.linear_solver_type = ceres::SPARSE_NORMAL_CHOLESKY;
-    // options.minimizer_progress_to_stdout = true;
+    // Run the solver!
+    Solver::Summary summary;
+    Solve(options, &problem, &summary);
 
-    // // Run the solver!
-    // Solver::Summary summary;
-    // Solve(options, &problem, &summary);
-
-    // std::cout << summary.BriefReport() << "\n";
+    std::cout << summary.BriefReport() << "\n";
     std::cout << " ->\n"
-              << parameters.At<SOn>(1) << endl << endl
-              << parameters.At<SOn>(2) << endl << endl;
+              << parameters.At<SOn>(1) << endl
+              << parameters.At<SOn>(2) << endl;
 
     // ASSERT_TRUE(R.isApprox(R2.matrix(), 1e-9));
   }
