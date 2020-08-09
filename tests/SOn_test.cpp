@@ -43,4 +43,20 @@ TEST(SOn, Hat) {
   ASSERT_TRUE(expected5.isApprox(actual5));
 }
 
+TEST(SOn, RetractJacobian) {
+  using RowMajorMatrix = Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic, Eigen::RowMajor>;
+  RowMajorMatrix expected(9, 3);
+  expected << 0., 0., 0., //
+      0., 0., 1.,         //
+      0., -1, 0.,         //
+      0., 0., -1,         //
+      0., 0., 0.,         //
+      1., 0., 0.,         //
+      0., 1., 0.,         //
+      -1, 0., 0.,         //
+      0., 0., 0.;
+  RowMajorMatrix actual = SOn::RetractJacobian<Eigen::RowMajor>(3);
+  ASSERT_TRUE(expected.isApprox(actual));
+}
+
 } // namespace

@@ -11,7 +11,7 @@
 
 namespace shonan {
 using Vector = Eigen::VectorXd;
-using Matrix = Eigen::MatrixXd;
+using Matrix = Eigen::MatrixXd; // column major
 
 class SOn {
 public:
@@ -56,6 +56,9 @@ public:
 
   // Calculate ambient dimension n from manifold dimensionality d.
   static size_t AmbientDim(size_t d) { return (1 + std::sqrt(1 + 8 * d)) / 2; }
+
+  // Calculate manifold dimensionality for SO(n).
+  static size_t Dimension(size_t n) { return n * (n - 1) / 2; }
 
   /**
    * Hat operator creates Lie algebra element corresponding to d-vector, where d
@@ -110,6 +113,24 @@ public:
     const auto I = Eigen::MatrixXd::Identity(n, n);
     return SOn((I + X) * (I - X).inverse());
   }
+
+  /**
+   * Jacobian of Retract at xi==0 is the n^2 x dim matrix of vectorized Lie
+   * algebra generators for SO(n). We allow return a row-major matrix here to
+   * play nicely with Ceres.
+   */
+  template <int Options = 0>
+  static Eigen::Matrix<double, -1, -1, Options> RetractJacobian(size_t n) {
+    assert(n > 0);
+    const size_t n2 = n * n, dim = Dimension(n);
+    Eigen::Matrix<double, -1, -1, Options> G(n2, dim);
+    for (size_t j = 0; j < dim; j++) {
+      const auto X = Hat(Vector::Unit(dim, j));
+      G.col(j) = Eigen::Map<const Matrix>(X.data(), n2, 1);
+    }
+    return G;
+  }
+
   /// @}
 }; // SOn
 
