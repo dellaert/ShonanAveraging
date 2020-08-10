@@ -26,8 +26,12 @@ public:
   /// @name Constructors
   /// @{
 
-  /// Default constructor
-  SOn() {}
+  /// Construct  SO(9)n) identity
+  explicit SOn(size_t n = 0) {
+    // We allow for n=0 as the default constructor, needed for serialization,
+    // wrappers etc.
+    matrix_ = Eigen::MatrixXd::Identity(n, n);
+  }
 
   /// Constructor from Eigen Matrix, dynamic version
   template <typename Derived>

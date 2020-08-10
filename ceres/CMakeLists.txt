@@ -1,5 +1,5 @@
 # executables
-set (tests SOn_test SOn_parameterization_test frobenius_prior_test shonan_factor_test shonan_ceres_test)
+set (tests SOn_test SOn_parameterization_test frobenius_prior_test shonan_factor_test parameters_test shonan_ceres_test)
 foreach(test ${tests})
     add_executable(${test} "${test}.cpp")
     target_link_libraries(${test} gtest_main Eigen3::Eigen ${CERES_LIBRARIES})

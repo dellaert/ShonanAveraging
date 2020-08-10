@@ -9,7 +9,8 @@
 
 #include "traits.h"
 
-#include <iostream>
+#include <vector>
+#include <map>
 
 namespace ceres {
 
