@@ -45,6 +45,10 @@ TEST(SOn, Hat) {
       4, -3, 2, -1, 0;
   const auto actual5 = SOn::Hat(v);
   ASSERT_TRUE(expected5.isApprox(actual5));
+
+  Matrix inplace(5, 5);
+  SOn::Hat(v, inplace);
+  ASSERT_TRUE(expected5.isApprox(inplace));
 }
 
 TEST(SOn, RetractJacobian) {
