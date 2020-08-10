@@ -158,6 +158,8 @@ public:
   }
 
   /// @}
+  
+  friend double* UnsafeStoragePtr(SOn &t)  { return t.matrix_.data(); }
 }; // SOn
 
 } // namespace shonan
@@ -165,6 +167,9 @@ public:
 namespace ceres {
 // define ceres traits for SOn
 template <> struct traits<shonan::SOn> {
+  /// Get unsafe pointer
+  static double* Unsafe(shonan::SOn &t) { return UnsafeStoragePtr(t); }
+
   /// Ambient dimensions = n^2
   static size_t AmbientDim(const shonan::SOn &t) { return t.matrix().size(); }
 

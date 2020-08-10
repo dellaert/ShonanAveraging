@@ -44,7 +44,7 @@ TEST_F(ShonanFactorTest, evaluateError) {
     auto factor = new ShonanFactor<3>(R12, p);
 
     // Initialize parameters
-    ceres::Parameters<> parameters;
+    ceres::ParameterMap<> parameters;
     parameters.Insert(1, Q1);
     parameters.Insert(2, Q2);
 
@@ -100,7 +100,7 @@ TEST_F(ShonanFactorTest, Optimization) {
     auto factor = new ShonanFactor<3>(R12, p);
 
     // Initialize parameters
-    ceres::Parameters<> parameters;
+    ceres::ParameterMap<> parameters;
     parameters.Insert(1, Q1);
     parameters.Insert(2, Q2);
     std::cout << "initial:\n"

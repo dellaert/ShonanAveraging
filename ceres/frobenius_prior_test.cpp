@@ -33,7 +33,7 @@ TEST(FrobeniusPrior, SO3) {
   auto factor = new FrobeniusPrior(R2.matrix());
 
   // Initialize parameters
-  ceres::Parameters<> parameters;
+  ceres::ParameterMap<> parameters;
   parameters.Insert(1, R1);
   std::cout << "initial:\n" << parameters.At<SOn>(1) << endl;
 

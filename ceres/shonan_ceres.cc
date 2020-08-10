@@ -23,6 +23,7 @@
 
 DEFINE_string(input, "", "The pose graph definition filename in g2o format.");
 
+using shonan::SOn;
 using ceres::examples::Constraint3d;
 using ceres::examples::MapOfPoses;
 using ceres::examples::Pose3d;
@@ -30,7 +31,8 @@ using ceres::examples::VectorOfConstraints;
 using std::cout;
 using std::endl;
 
-static ceres::Parameters<int> kParameters;
+static ceres::ParameterBuffer<SOn> kParameters;
+
 
 namespace shonan {
 
@@ -55,7 +57,7 @@ void BuildOptimizationProblem(const VectorOfConstraints &constraints,
     auto factor = new ShonanFactor<3>(SOn(R12), p);
 
     // Add to problem aka factor graph
-    int id1 = constraint.id_begin, id2 = constraint.id_end;
+    size_t id1 = constraint.id_begin, id2 = constraint.id_end;
     std::vector<double *> unsafe = kParameters.Unsafe({id1, id2});
     problem->AddResidualBlock(factor, nullptr, unsafe[0], unsafe[1]);
     for (auto block : unsafe) {
@@ -89,7 +91,7 @@ bool OutputRotations(const std::string &filename, const MapOfPoses &poses) {
     return false;
   }
   for (const auto &pair : poses) {
-    outfile << pair.first << ":\n" << kParameters.At<SOn>(pair.first) << '\n';
+    outfile << pair.first << ":\n" << kParameters.At(pair.first) << '\n';
   }
   return true;
 }
@@ -97,8 +99,6 @@ bool OutputRotations(const std::string &filename, const MapOfPoses &poses) {
 } // namespace shonan
 
 int main(int argc, char **argv) {
-  using shonan::SOn;
-  
   google::InitGoogleLogging(argv[0]);
   GFLAGS_NAMESPACE::ParseCommandLineFlags(&argc, &argv, true);
 
@@ -118,13 +118,13 @@ int main(int argc, char **argv) {
     auto R = pair.second.q.toRotationMatrix();
     cout << pair.first << ":" << endl;
     cout << SOn(R) << endl << endl;
-    kParameters.Insert(pair.first, SOn(R));
+    kParameters.PushBack(SOn(R));
   }
 
   // Print parameters
   for (const auto &pair : poses) {
     cout << kParameters.Unsafe(pair.first) << ":" << endl;
-    cout << kParameters.At<SOn>(pair.first) << endl << endl;
+    cout << kParameters.At(pair.first) << endl << endl;
   }
 
   CHECK(shonan::OutputRotations("poses_original.txt", poses))
@@ -136,7 +136,7 @@ int main(int argc, char **argv) {
   // Print parameters
   for (const auto &pair : poses) {
     cout << kParameters.Unsafe(pair.first) << ":" << endl;
-    cout << kParameters.At<SOn>(pair.first) << endl << endl;
+    cout << kParameters.At(pair.first) << endl << endl;
   }
 
   CHECK(shonan::SolveOptimizationProblem(&problem))

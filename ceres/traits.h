@@ -11,17 +11,6 @@ namespace ceres {
 
 /**
  * Traits used in presenting a type-checked API to Ceres
- *
- * Required traits for Parameters:
- *
- *      // Ambient dimension:
- *      static size_t AmbientDim(const T &t);
- *
- *      // Vectorize to doubles in pre-allocated block:
- *      static void Vec(const T &t, double *const block);
- *
- *      // Initialize from vectorized storage:
- *      static T Unvec(size_t n, const double *const block);
  */
 template <typename T> struct traits {};
 
