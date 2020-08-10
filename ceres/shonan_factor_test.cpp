@@ -6,13 +6,13 @@
  */
 
 #include "SOn_parameterization.h"
-#include "numerical_derivative.h"
 #include "parameters.h"
 #include "shonan_factor.h"
 
-#include "ceres/ceres.h"
-
+#include "numerical_derivative.h"
 #include "gtest/gtest.h"
+
+#include "ceres/ceres.h"
 
 #include <iostream>
 
@@ -80,6 +80,15 @@ TEST_F(ShonanFactorTest, evaluateError) {
     };
     Matrix expectedH2 = ceres::numericalDerivative<Matrix, SOn>(h2, Q2);
     ASSERT_TRUE(expectedH2.isApprox(actualH2, 1e-9));
+
+    // Check parameterization chain rule
+    SOnParameterization SOn_local_parameterization(p);
+    const Matrix mul1 = actualH1 * SOn_local_parameterization.Jacobian(Q1.matrix());
+    ASSERT_EQ(mul1.rows(), p*3);
+    ASSERT_EQ(mul1.cols(), SOn::Dimension(p));
+    const Matrix mul2 = actualH2 * SOn_local_parameterization.Jacobian(Q2.matrix());
+    ASSERT_EQ(mul2.rows(), p*3);
+    ASSERT_EQ(mul2.cols(), SOn::Dimension(p));
   }
 }
 

@@ -22,6 +22,8 @@ TEST(SOnParameterization, SO3Plus) {
   v << 1, 2, 3;
   const SOn Q(SOn::Retract(v));
   SOnParameterization param(3);
+  ASSERT_EQ(param.GlobalSize(), 9);
+  ASSERT_EQ(param.LocalSize(), 3);
   Vector xi(3);
   v << 4, 5, 6;
   auto expected = SOnParameterization::Retract(Q, xi);
@@ -71,6 +73,8 @@ TEST(SOnParameterization, SO4ComputeJacobian) {
   v << 1, 2, 3, 4, 5, 6;
   const SOn Q(SOn::Retract(v));
   SOnParameterization param(4);
+  ASSERT_EQ(param.GlobalSize(), 16);
+  ASSERT_EQ(param.LocalSize(), 6);
   auto h = [&](const Vector &xi) -> SOn {
     return SOnParameterization::Retract(Q, xi);
   };

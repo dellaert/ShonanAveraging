@@ -53,13 +53,19 @@ public:
     }
   }
 
+  /// Calculate Jacobian from a Matrix
+  // TODO(frank): use Ref?
+  Matrix Jacobian(const Matrix&R) const  {
+    DMul(R, &Rplus_H_Delta_);
+    // Apply chain rule
+    return Rplus_H_Delta_ * Delta_H_xi_;
+  }
+  
+  /// Calculate Jacobian
   bool ComputeJacobian(const double *x, double *jacobian) const override {
     if (jacobian) {
       Eigen::Map<const Matrix> R(x, n_, n_);
-      DMul(R, &Rplus_H_Delta_);
-      // Apply chain rule
-      Eigen::Map<Matrix> H(jacobian, nn_, dim_);
-      H = Rplus_H_Delta_ * Delta_H_xi_;
+      Eigen::Map<Matrix>(jacobian, nn_, dim_) = Jacobian(R);
     }
     return true;
   }
