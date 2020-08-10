@@ -12,8 +12,6 @@
 #include "matrix.h"
 #include "parameters.h"
 
-#include <iostream>
-
 namespace shonan {
 
 /// Calculates Frobenius error between 2 Stiefel projections of SO(n).
@@ -37,7 +35,7 @@ public:
     assert(R12.matrix().rows() == d);
     mutable_parameter_block_sizes()->push_back(pp_); // elements in SO(p) matrix
     mutable_parameter_block_sizes()->push_back(pp_); // same for second block
-    set_num_residuals(d); // elements in Stiefel Frobenius norm
+    set_num_residuals(dim_); // elements in Stiefel Frobenius norm
 
     // Pre-calculate Jacobians
     // TODO(frank): they are constant (and sparse!), how to handle in ceres?
@@ -80,11 +78,9 @@ public:
                 double **jacobians) const override {
     Eigen::Map<const Matrix> M1(values[0], p_, p_);
     Eigen::Map<const Matrix> M2(values[1], p_, p_);
-    std::cout << values[0] << "," << values[1] << std::endl;
     if (error != nullptr) {
       Eigen::Map<Vector> e(error, dim_, 1);
       e = Evaluate(M1, M2);
-      std::cout << error << ": " << e.transpose() << std::endl;
     }
 
     // Compute the Jacobian if asked for.
