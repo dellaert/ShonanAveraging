@@ -19,19 +19,19 @@ template <size_t d = 3> class ShonanFactor : public ceres::CostFunction {
 public:
   using Matrix = ceres::Matrix;
   using Vector = ceres::Vector;
-  using MatrixRef = ceres::MatrixRef;
 
 private:
-  Matrix M_;            ///< measured rotation between R1 and R2
-  size_t p_, pp_, dim_; ///< dimensionality constants
-  Matrix H1_, H2_;      ///< constant Jacobians
+  Matrix M_;               ///< measured rotation between R1 and R2
+  size_t p_, pp_, dim_;    ///< dimensionality constants
+  Matrix H1_, H2_;         ///< constant Jacobians
+  mutable Vector scratch_; ///< internal scratch space
 
 public:
   /// Construct from rotation variable index and prior mean, as an nxn matrix.
   explicit ShonanFactor(const SOn &R12, size_t p)
       : M_(R12.matrix()),                //
         p_(p), pp_(p * p), dim_(p_ * d), //
-        H1_(dim_, pp_), H2_(dim_, pp_) {
+        H1_(dim_, pp_), H2_(dim_, pp_), scratch_(dim_) {
     assert(R12.matrix().rows() == d);
     mutable_parameter_block_sizes()->push_back(pp_); // elements in SO(p) matrix
     mutable_parameter_block_sizes()->push_back(pp_); // same for second block
@@ -56,16 +56,21 @@ public:
 
   virtual ~ShonanFactor() {}
 
-  // Evaluate Frobenius error, with Matrix arguments
-  // TODO: use MatrixRef for Maps?
-  Vector Evaluate(const Matrix &M1, const Matrix &M2) const {
+  // Evaluate Frobenius error in-place
+  void EvaluateInPlace(const Eigen::Ref<const Matrix> &M1,
+                       const Eigen::Ref<const Matrix> &M2) const {
     // Vectorize and extract only d leftmost columns, i.e. vec(M2*P)
-    Vector fQ2 = ceres::vec(M2.leftCols<d>());
+    Eigen::Map<Matrix>(scratch_.data(), p_, d) = M2.leftCols<d>();
 
-    // Vectorize M1*P*R12
-    Vector hQ1 = ceres::vec(M1.leftCols<3>() * M_);
+    // // Subtract vec(M1*P*R12)
+    Eigen::Map<Matrix>(scratch_.data(), p_, d) -= M1.leftCols<3>() * M_;
+  }
 
-    return fQ2 - hQ1;
+  // Evaluate Frobenius error, with Matrix Ref arguments
+  Vector Evaluate(const Eigen::Ref<const Matrix> &M1,
+                  const Eigen::Ref<const Matrix> &M2) const {
+    EvaluateInPlace(M1, M2);
+    return scratch_;
   }
 
   // Evaluate Frobenius error, with SOn values
@@ -76,11 +81,11 @@ public:
   // Evaluate Frobenius error
   bool Evaluate(double const *const *values, double *error,
                 double **jacobians) const override {
-    Eigen::Map<const Matrix> M1(values[0], p_, p_);
-    Eigen::Map<const Matrix> M2(values[1], p_, p_);
     if (error != nullptr) {
-      Eigen::Map<Vector> e(error, dim_, 1);
-      e = Evaluate(M1, M2);
+      Eigen::Map<const Matrix> M1(values[0], p_, p_);
+      Eigen::Map<const Matrix> M2(values[1], p_, p_);
+      EvaluateInPlace(M1, M2);
+      Eigen::Map<Vector>(error, dim_, 1) = scratch_;
     }
 
     // Compute the Jacobian if asked for.

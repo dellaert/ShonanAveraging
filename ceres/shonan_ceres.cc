@@ -23,6 +23,7 @@
 #include <vector>
 
 DEFINE_string(input, "", "The pose graph definition filename in g2o format.");
+DEFINE_uint64(p_value, 3, "The value of p, we will optimize over SO(p) values.");
 
 namespace shonan {
 
@@ -120,7 +121,7 @@ int main(int argc, char **argv) {
   std::cout << "Number of poses: " << poses.size() << '\n';
   std::cout << "Number of constraints: " << constraints.size() << '\n';
 
-  size_t p = 4;
+  size_t p = FLAGS_p_value;
   ceres::ParameterBuffer<shonan::SOn> parameters;
   InitializeRotationUnknowns(poses, p, &parameters);
 
