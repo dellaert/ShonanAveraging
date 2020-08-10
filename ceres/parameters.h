@@ -9,8 +9,9 @@
 
 #include "traits.h"
 
-#include <vector>
+#include <iostream>
 #include <map>
+#include <vector>
 
 namespace ceres {
 
@@ -41,23 +42,19 @@ template <typename T> class ParameterBuffer : public Parameters<size_t> {
 public:
   ParameterBuffer() {}
 
-  ParameterBuffer(size_t size):array_(size) {}
+  ParameterBuffer(size_t size) : array_(size) {}
 
-  void Reserve(size_t size) {
-    array_.reserve(size);
-  }
+  void Reserve(size_t size) { array_.reserve(size); }
 
-  void PushBack(const T &t) {
-    array_.push_back(t);
-  }
+  void PushBack(const T &t) { array_.push_back(t); }
 
   // Return T value from block with given key
-  T At(size_t index) {
-    return array_[index];
-  }
+  T At(size_t index) const { return array_[index]; }
 
   // Return unsafe pointer to block with given key
-  double *Unsafe(size_t index) override { return traits<T>::Unsafe(array_[index]); }
+  double *Unsafe(size_t index) override {
+    return traits<T>::Unsafe(array_[index]);
+  }
 
   // Fill an array with unsafe pointers to blocks at given keys
   std::vector<double *> Unsafe(std::vector<size_t> indices) override {
@@ -67,6 +64,15 @@ public:
       result.push_back(this->Unsafe(i));
     }
     return result;
+  }
+
+  friend std::ostream &operator<<(std::ostream &os, const ParameterBuffer &p) {
+    size_t i = 0;
+    for (const auto &t : p.array_) {
+      os << i++ << ":\n";
+      os << t << "\n";
+    }
+    return os;
   }
 };
 
@@ -105,8 +111,8 @@ public:
   }
 
   // Return T value from block with given key
-  template <typename T> T At(Key key) {
-    const Block &block = blocks_[key];
+  template <typename T> T At(Key key) const {
+    const Block &block = blocks_.at(key);
     return traits<T>::Unvec(block.size(), block.data());
   }
 

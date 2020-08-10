@@ -23,13 +23,16 @@ private:
   size_t n_, nn_; ///< dimensionality constants
 
 public:
-  /// Construct from rotation variable index and prior mean, as an nxn matrix.
+  /// Construct from prior mean, as an nxn matrix.
   explicit FrobeniusPrior(const Matrix &mean)
       : vectorized_mean_(ceres::vec(mean)), n_(mean.rows()), nn_(n_ * n_) {
     assert(mean.cols() == n_);
     mutable_parameter_block_sizes()->push_back(nn_); // elements in SO(n) matrix
     set_num_residuals(nn_); // elements in Frobenius norm
   }
+
+  /// Construct from SOn instance.
+  explicit FrobeniusPrior(const SOn &mean) : FrobeniusPrior(mean.matrix()) {}
 
   virtual ~FrobeniusPrior() {}
 
