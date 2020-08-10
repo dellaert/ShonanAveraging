@@ -41,6 +41,44 @@
 namespace ceres {
 namespace examples {
 
+// Reads a single pose from the input and inserts it into the map. Returns false
+// if there is a duplicate entry.
+template <typename Pose, typename Allocator>
+bool ReadVertex(std::ifstream *infile,
+                std::map<int, Pose, std::less<int>, Allocator> *poses) {
+  int id;
+  Pose pose;
+  *infile >> id >> pose;
+
+  // Ensure we don't have duplicate poses.
+  if (poses->find(id) != poses->end()) {
+    LOG(ERROR) << "Duplicate vertex with ID: " << id;
+    return false;
+  }
+  (*poses)[id] = pose;
+
+  return true;
+}
+
+// Reads the contraints between two vertices in the pose graph
+template <typename Constraint, typename Allocator>
+void ReadConstraint(std::ifstream *infile,
+                    std::vector<Constraint, Allocator> *constraints) {
+  Constraint constraint;
+  *infile >> constraint;
+
+  constraints->push_back(constraint);
+}
+
+template <typename T> Eigen::Matrix<T, 2, 2> RotationMatrix2D(T yaw_radians) {
+  const T cos_yaw = ceres::cos(yaw_radians);
+  const T sin_yaw = ceres::sin(yaw_radians);
+
+  Eigen::Matrix<T, 2, 2> rotation;
+  rotation << cos_yaw, -sin_yaw, sin_yaw, cos_yaw;
+  return rotation;
+}
+
 // Reads a file in the g2o filename format that describes a pose graph
 // problem. The g2o format consists of two entries, vertices and constraints.
 //
