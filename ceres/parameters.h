@@ -9,6 +9,8 @@
 
 #include "traits.h"
 
+#include <iostream>
+
 namespace ceres {
 
 /**
@@ -26,8 +28,8 @@ public:
   template <typename T> bool Insert(Key key, const T &t) {
     typename Blocks::iterator it;
     bool success;
-    std::tie(it, success) =
-        blocks_.emplace(key, Block(traits<T>::AmbientDim(t)));
+    size_t n = traits<T>::AmbientDim(t);
+    std::tie(it, success) = blocks_.emplace(key, Block(n));
     if (success) {
       traits<T>::Vec(t, it->second.data());
     }
