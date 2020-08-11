@@ -157,11 +157,11 @@ public:
   template <int Options = 0>
   static Eigen::Matrix<double, -1, -1, Options> RetractJacobian(size_t n) {
     assert(n > 0);
-    const size_t n2 = n * n, dim = Dimension(n);
-    Eigen::Matrix<double, -1, -1, Options> G(n2, dim);
+    const size_t nn = n * n, dim = Dimension(n);
+    Eigen::Matrix<double, -1, -1, Options> G(nn, dim);
     for (size_t j = 0; j < dim; j++) {
       const auto X = Hat(Vector::Unit(dim, j));
-      G.col(j) = Eigen::Map<const Matrix>(X.data(), n2, 1);
+      G.col(j) = Eigen::Map<const Matrix>(X.data(), nn, 1);
     }
     return G;
   }

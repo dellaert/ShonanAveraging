@@ -62,8 +62,6 @@ TEST(SOnParameterization, SO3ComputeJacobian) {
   Matrix expected = ceres::numericalDerivative<SOn, Vector>(h, xi);
   Matrix actual(9, 3);
   param.ComputeJacobian(Q.matrix().data(), actual.data());
-  cout << expected << endl << endl;
-  cout << actual << endl;
   ASSERT_TRUE(expected.isApprox(actual, 1e-9));
 }
 
@@ -84,4 +82,27 @@ TEST(SOnParameterization, SO4ComputeJacobian) {
   Matrix actual(16, 6);
   param.ComputeJacobian(Q.matrix().data(), actual.data());
   ASSERT_TRUE(expected.isApprox(actual, 1e-9));
+}
+
+// Check MultiplyByJacobian against default implementation
+TEST(SOnParameterization, SO4MultiplyByJacobian) {
+  Vector v(6);
+  v << 1, 2, 3, 4, 5, 6;
+  const SOn Q(SOn::Retract(v));
+  SOnParameterization param(4);
+
+  // Invent global Jacobian
+  const int num_rows = 12;
+  Matrix global_matrix(num_rows, 16);
+  global_matrix.setIdentity();
+
+  Matrix expected(num_rows, 6);
+  param.ceres::LocalParameterization::MultiplyByJacobian(
+      Q.matrix().data(), num_rows, global_matrix.data(), expected.data());
+
+  Matrix local_matrix(num_rows, 6);
+  param.MultiplyByJacobian(Q.matrix().data(), num_rows, global_matrix.data(),
+                           local_matrix.data());
+
+  ASSERT_TRUE(expected.isApprox(local_matrix, 1e-9));
 }
