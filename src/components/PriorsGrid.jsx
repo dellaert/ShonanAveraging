@@ -9,8 +9,8 @@ type Props = { gamma_values: Array<number>; };
 
 function PriorsGrid(props: Props) {
     const { gamma_values } = props;
-    const alpha_values = [0, 1, 100, 10000];
-    const beta_values = [0, 1, 100, 10000];
+    const alpha_values = [0, 100];
+    const beta_values = [0, 100];
     const [current_gamma, setN] = useState(gamma_values[0]);
 
     return (

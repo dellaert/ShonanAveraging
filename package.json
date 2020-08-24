@@ -6,7 +6,7 @@
   "scripts": {
     "flow": "flow",
     "start": "jekyll serve",
-    "build": "webpack"
+    "build": "webpack -p"
   },
   "repository": {
     "type": "git",

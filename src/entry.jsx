@@ -15,22 +15,22 @@ ReactDOM.render(<PaperHeader
     authors={[{ name: "Frank Dellaert", affiliation: 1, link: "https://dellaert.github.io/" },
     { name: "David M. Rosen", affiliation: 2, link: "https://marinerobotics.mit.edu/people/david-rosen" },
     { name: "Jing Wu", affiliation: 1 },
-    { name: "Robert Mahony", affiliation: 3 },
+    { name: "Robert Mahony", affiliation: 3, link: "https://cecs.anu.edu.au/people/robert-mahony" },
     { name: "Luca Carlone", affiliation: 2, link: "https://lucacarlone.mit.edu/" },
     ]}
     affiliations={["Georgia Institute of Technology", "Massachusetts Inst. of Technology", "Australian National University"]}
 />,
     document.getElementById('header'));
 
-ReactDOM.render(<Media paper="assets/Dellaert20arxiv_Shonan_eccv20.pdf"
+ReactDOM.render(<Media paper="https://arxiv.org/abs/2008.02737"
     video="https://youtu.be/5ppaqMyHtE0"
     repo="https://github.com/dellaert/ShonanAveraging" />,
     document.getElementById('media'));
 
-ReactDOM.render(<Video videoId="5ppaqMyHtE0"/>, document.getElementById('video'));
+ReactDOM.render(<Video videoId="5ppaqMyHtE0" />, document.getElementById('video'));
 
-ReactDOM.render(<PriorsGrid gamma_values={[0, 1, 100, 10000]} />, document.getElementById('priors'));
+// ReactDOM.render(<PriorsGrid gamma_values={[0, 100]} />, document.getElementById('priors'));
 
 ReactDOM.render(<ImageGrid n_values={[20, 40]} k_values={[4, 8, 16]} />, document.getElementById('matrix'));
 
-ReactDOM.render(<PivotTable />, document.getElementById('pivot'));
+// ReactDOM.render(<PivotTable />, document.getElementById('pivot'));
