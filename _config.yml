@@ -17,6 +17,6 @@ markdown: kramdown
 
 header_pages:
   - index.md
-  - news.md
+  # - news.md
 
 exclude: ['node_modules', 'src']
