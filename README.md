@@ -2,23 +2,27 @@
 
 Shonan rotation averaging takes pairwise rotation measurements and returns a set of absolute rotation matrices that are a global minimizer of the measurement error, measured by the Frobenius norm. For more explanation, check out the corresponding [project website](https://dellaert.github.io/ShonanAveraging/index.html).
 
-The code is now part of GTSAM 4.1, although we are planning a port to Ceres as well. The easiest way to get started is using the pythown wrapper interface in GSAM, instructions below.
+The code is now part of GTSAM 4.1, although we are planning a port to Ceres as well. The easiest way to get started is using the python wrapper interface in GSAM, instructions below.
+
+## [GTSAM in Colab Notebook]
+
+The super-easy way to get run the code is via this [colab notebook](https://colab.research.google.com/drive/1jbUUtovbvSXKNcXUpxntSM4yDI5r5rry?usp=sharing).
 
 ## [GTSAM](https://gtsam.org)
 
-This should get you started, on Linux python 3.6.9 is currently supported:
+We have currently tested on Linux and MacOS. To get started on a **Linux** machine, python 3.6.9 is currently supported:
 ```bash
     conda create --name py369 python=3.6.9
     conda activate py369
 ```
 
-On Mac, we are tracking the homebrew version, which is 3.8:
+On **MacOS**, we are tracking the homebrew version, which is 3.8:
 ```bash
     conda create --name py38 python=3.8
     conda activate py38
 ```
 
-Then install matplotlib and gtsam:
+From that point on, everything should be the same.First, install matplotlib and gtsam:
 ```bash
     conda install matplotlib
     pip install gtsam
