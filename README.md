@@ -6,14 +6,23 @@ The code is now part of GTSAM 4.1, although we are planning a port to Ceres as w
 
 ## [GTSAM](https://gtsam.org)
 
-This should get you started, on Linux (Mac build of gtsam 4.1 wheel is in progress):
+This should get you started, on Linux python 3.6.9 is currently supported:
 ```bash
     conda create --name py369 python=3.6.9
     conda activate py369
-    pip install gtsam
-    pip install matplotlib
 ```
 
+On Mac, we are tracking the homebrew version, which is 3.8:
+```bash
+    conda create --name py38 python=3.8
+    conda activate py38
+```
+
+Then install matplotlib and gtsam:
+```bash
+    conda install matplotlib
+    pip install gtsam
+```
 Clone this repo, cd to the gtsam subfolder, and run the test
 ```bash
     cd gtsam
@@ -21,7 +30,7 @@ Clone this repo, cd to the gtsam subfolder, and run the test
 ```
 You can then run the CLI using
 ```bash
-    python ShonanAveragingCLI.py pose3example-grid.txt
+    python ShonanAveragingCLI.py -i pose3example-grid.txt
 ```
 The files follow the g2o coding convention, and should store SE(3) constraints rather than just SO(3). You can just store zero translations if you do not have them. 
 
