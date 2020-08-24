@@ -2,11 +2,11 @@
 
 Shonan rotation averaging takes pairwise rotation measurements and returns a set of absolute rotation matrices that are a global minimizer of the measurement error, measured by the Frobenius norm. For more explanation, check out the corresponding [project website](https://dellaert.github.io/ShonanAveraging/index.html).
 
-The code is now part of GTSAM 4.1, although we are planning a port to Ceres as well. The easiest way to get started is using the python wrapper interface in GSAM, instructions below.
+The code is now part of GTSAM 4.1, although we are planning a port to Ceres as well. The easiest way to get started is using the python wrapper interface in GTSAM, instructions below.
 
 ## [GTSAM in Colab Notebook]
 
-The super-easy way to get run the code is via this [colab notebook](https://colab.research.google.com/drive/1jbUUtovbvSXKNcXUpxntSM4yDI5r5rry?usp=sharing).
+The super-easy way to get run the code is via this [Colab notebook](https://colab.research.google.com/drive/1jbUUtovbvSXKNcXUpxntSM4yDI5r5rry?usp=sharing).
 
 ## [GTSAM](https://gtsam.org)
 
@@ -27,7 +27,7 @@ From that point on, everything should be the same.First, install matplotlib and 
     conda install matplotlib
     pip install gtsam
 ```
-Clone this repo, cd to the gtsam subfolder, and run the test
+Clone this repo, cd to the `gtsam` subfolder, and run the test
 ```bash
     cd gtsam
     python test_ShonanAveraging.py 
@@ -38,7 +38,7 @@ You can then run the CLI using
 ```
 The files follow the g2o coding convention, and should store SE(3) constraints rather than just SO(3). You can just store zero translations if you do not have them. 
 
-The constraints are most conventiently given using `EDGE_SE3:QUAT` lines:
+The constraints are most conveniently given using `EDGE_SE3:QUAT` lines:
 ```
 EDGE_SE3:QUAT i j x y z qx qy qz qw + 21 entries of 6*6 upper triangular covariance matrix
 ```
