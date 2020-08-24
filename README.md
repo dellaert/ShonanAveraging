@@ -1,6 +1,6 @@
 # Shonan Rotation Averaging
 
-Shonan rotation averaging takes pairwise rotation measurements and returns a set of absolute rotation matrices that are a global minimizer of the measurement error, measured by the Frobenius norm.
+Shonan rotation averaging takes pairwise rotation measurements and returns a set of absolute rotation matrices that are a global minimizer of the measurement error, measured by the Frobenius norm. For more explanation, check out the corresponding [project website](https://dellaert.github.io/ShonanAveraging/index.html).
 
 The code is now part of GTSAM 4.1, although we are planning a port to Ceres as well. The easiest way to get started is using the pythown wrapper interface in GSAM, instructions below.
 
