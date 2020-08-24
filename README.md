@@ -6,7 +6,7 @@ The code is now part of GTSAM 4.1, although we are planning a port to Ceres as w
 
 ## [GTSAM in Colab Notebook]
 
-The super-easy way to get run the code is via this [Colab notebook](https://colab.research.google.com/drive/1jbUUtovbvSXKNcXUpxntSM4yDI5r5rry?usp=sharing).
+The super-easy way to get run the code is via this [Colab notebook](https://github.com/dellaert/ShonanAveraging/blob/master/gtsam/ShonanAveraging.ipynb).
 
 ## [GTSAM](https://gtsam.org)
 
