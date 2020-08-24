@@ -13,6 +13,10 @@ permalink: /
 
 Shonan Rotation Averaging is a fast, simple, and elegant rotation averaging algorithm that is guaranteed to recover globally optimal solutions under mild assumptions on the measurement noise. Our method employs semidefinite relaxation in order to recover provably globally optimal solutions of the rotation averaging problem. In contrast to prior work, we show how to solve large-scale instances of these relaxations using manifold minimization on (only slightly) higher-dimensional rotation manifolds, re-using existing high-performance (but local) structure-from-motion pipelines. Our method thus preserves the speed and scalability of current SFM methods, while recovering globally optimal solutions.
 
+#### Colab Notebook
+
+Try it out quickly with this [mimimal colab notebook](https://github.com/dellaert/ShonanAveraging/blob/master/gtsam/ShonanAveraging.ipynb).
+
 #### Spotlight Video
 
 Below is the ECCV 2020 spotlight video, narrated by Frank, which gives a flavor for the method using "small world graphs", as inspired by the [paper by Kyle Wilson and David Bindel](https://arxiv.org/abs/2003.08310).  He also gives an overview of the results on real-world datasets, as well as the intuition behind the mathematical underpinnings of Shonan Averaging.
