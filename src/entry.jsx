@@ -13,7 +13,7 @@ ReactDOM.render(<PaperHeader
     subtitle="Global Optimality by Surfing SO(p)^n"
     venue="ECCV 2020 (Spotlight)"
     authors={[{ name: "Frank Dellaert", affiliation: 1, link: "https://dellaert.github.io/" },
-    { name: "David M. Rosen", affiliation: 2, link: "https://marinerobotics.mit.edu/people/david-rosen" },
+    { name: "David M. Rosen", affiliation: 2, link: "https://david-m-rosen.github.io/" },
     { name: "Jing Wu", affiliation: 1 },
     { name: "Robert Mahony", affiliation: 3, link: "https://cecs.anu.edu.au/people/robert-mahony" },
     { name: "Luca Carlone", affiliation: 2, link: "https://lucacarlone.mit.edu/" },
